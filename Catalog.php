@@ -15,7 +15,6 @@ class Controller_Index_Catalog extends Controller_Index {
         ));
     }
 
-
     public function action_list(){
 
         $cat_alias = Request::initial()->param('catalias');
@@ -31,13 +30,11 @@ class Controller_Index_Catalog extends Controller_Index {
             'view'        => 'index/pagination/index_pagination',
         ))->route_params(array('action'=> 'list','catalias' => $cat_alias, 'type' => $type?$type:null,'male' => $for?$for:null)) ;
 
-       //stanum enq cateorian sesiayi mijocov
+
         if($cat_alias){
             $this->_session->set('category', $cat_alias);
         }
-        // stanum enq categoryaner#
 
-        //stanum 1 category
         if($cat_alias){
             $this->_item = ORM::factory('Category',array('alias' => $cat_alias));
             if(!$this->_item->loaded()){
@@ -45,7 +42,6 @@ class Controller_Index_Catalog extends Controller_Index {
             }
         }
 
-        //stanum enq filtreri  URL
         if (isset($_POST['type']) OR isset($_POST['for'])){
 
             $type = $_POST['type'] ? $_POST['type'] : null;
@@ -82,19 +78,15 @@ class Controller_Index_Catalog extends Controller_Index {
         $this->template->content = $content;
     }
 
-
-
     public function action_anketa(){
 
         $prod_alias = Request::initial()->param('prodalias');
 
-        //stanum enq 1 hat product
         $this->_item = ORM::factory('Product', array('alias' => $prod_alias));
         if(!$this->_item->loaded()){
             throw new HTTP_Exception_404();
         }
 
-        // stanum en categoryan aliasi mijocov
         $data = $this->_session->as_array();
         if(!empty($data['category'])){
             $cat = $data['category'];
@@ -104,7 +96,6 @@ class Controller_Index_Catalog extends Controller_Index {
             $category_s = $this->_item->categories->find();
         }
 
-        //stanum enq nmanatip apranqner@
         $prod = array();
         $category = $this->_item->categories->where('hide', '=', 0)->find_all();
         foreach($category as $items){
@@ -132,8 +123,6 @@ class Controller_Index_Catalog extends Controller_Index {
     public function action_search(){
 
         $page = Request::initial()->param('page');
-        
-        
         
         $lang = I18n::$lang !== $this->_primary_lang->iso ? I18n::$lang : null;
 
@@ -177,9 +166,6 @@ class Controller_Index_Catalog extends Controller_Index {
             'view'        => 'index/pagination/index_pagination',
         ))->route_params(array('action'=> 'list','search_text' => $search_text));
 
-
-        //var_dump($page); die;
-        
         $this->template->content = View::factory('index/catalog/search', array(
             'left_menu' =>  $this->left_menu,
             'title_search'  =>  $this->item['title'],
